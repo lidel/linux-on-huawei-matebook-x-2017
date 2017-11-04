@@ -29,7 +29,7 @@ I am running Debian on it. This repository documents what works and what does no
 | Battery | 40 Wh Lithium-Polymer | 💚 Yes | Everything works: current status, chargin/discharging rate and remaining battery time estimates |
 | Lid | ACPI-compliant |  💚 Yes | Works as expected: I can just close the lid and it sleeps  |
 | Keyboard |  | 👁️‍🗨️ Mostly | some function keys do not work (eg. display brightness control, keyboard backlight control) | 
-| Touchpad | | 💚 Yes | Tap-to-click can be enabled via `libinput` ([see details below](#Touchpad)) |
+| Touchpad | | 💚 Yes | Tap-to-click can be enabled via `libinput` ([see details below](#touchpad)) |
 | Port Extender | USC-C dongle included with laptop | 💚 Yes | Full-size HDMI works as expected |
 
 ## Power Management
