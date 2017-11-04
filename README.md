@@ -29,7 +29,7 @@ I am running Debian on it. This repository documents what works and what does no
 | Battery | 40 Wh Lithium-Polymer | 💚 Yes | Everything works: current status, chargin/discharging rate and remaining battery time estimates |
 | Lid | ACPI-compliant |  💚 Yes | Works as expected: I can just close the lid and it sleeps  |
 | Keyboard |  | 👁️‍🗨️ Mostly | some function keys do not work (eg. display brightness control, keyboard backlight control) | 
-| Touchpad | | 💚 Yes | Tap-to-click can be enabled via `libinput` (TODO: document) |
+| Touchpad | | 💚 Yes | Tap-to-click can be enabled via `libinput` ([see details below](#Touchpad)) |
 | Port Extender | USC-C dongle included with laptop | 💚 Yes | Full-size HDMI works as expected |
 
 ## Power Management
@@ -37,3 +37,43 @@ I am running Debian on it. This repository documents what works and what does no
 Been testing it with Debian Stable + backported kernel 4.12. I've installed laptop-mode-tools (instead of TLP) and minimalist i3-wm (instead of Gnome).  With this setup and my workflow (mostly browser + ssh) the battery lasts for around 6-7 hours. Switching to more intensive things like code compilation or video encoding for prolonged time cuts battery to around 4 hours. 
 
 TODO: document `laptop-mode-tools`
+
+## Touchpad
+
+I prefer natural (reversed) scrolling and tap-to-click.
+Both behaviors are disabled by default, but can be easily enabled via libinput.
+
+To test, change a property manually:
+
+```
+$ xinput list | grep Touchpad
+    ↳ ELAN2201:00 04F3:3056 Touchpad          	id=10	[slave  pointer  (2)]
+
+$ xinput list-props 10 | grep Tapping\ Enabled
+    libinput Tapping Enabled (280):	0
+
+$ xinput set-prop 10 280 1
+
+$ xinput list-props 10 | grep Tapping\ Enabled
+    libinput Tapping Enabled (280):	1
+```
+
+To make it permanent, create `/etc/X11/xorg.conf.d/40-libinput.conf` with:
+
+```
+Section "InputClass"
+        Identifier      "touchpad catchall"
+        MatchIsTouchpad "on"
+        Driver           "libinput"
+EndSection
+
+Section "InputClass"
+        Identifier "tap-by-default"
+        MatchIsTouchpad "on"
+        MatchDriver "libinput"
+        Option "Tapping" "on"
+        Option "NaturalScrolling" "true"
+        Option "AccelSpeed" "1"
+        #Option "TappingButtonMap" "lmr"       
+EndSection
+```
