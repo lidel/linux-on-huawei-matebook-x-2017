@@ -18,7 +18,7 @@ I am running Debian on it. This repository documents what works and what does no
 | Processor | Intel Core i5-7200U | 💚 Yes | 4 cores (2 real ones), power states etc work out of the box (TODO: document)  |
 | Graphics | Intel HD Graphics 620 |  💚 Yes | via standard kernel driver (TODO: document) |
 | Memory | 8192 MB |  💚 Yes |  |
-| Display | 13.3 inch 16:9, 2160x1440 (2K) | 💚 Yes | resolution is correctly detected by `xrandr`, backlight control does not work via native function keys, but works via additional scripts (TODO: document) |
+| Display | 13.3 inch 16:9, 2160x1440 (2K) | 💚 Yes | resolution is correctly detected by `xrandr`, backlight control does not work via native function keys, but works via additional scripts (see [Display Backlight](#display-backlight)) |
 | Storage | LITEON CB1-SD256, 256 GB | 💚 Yes | via standard kernel driver (TODO: document) |
 | Soundcard  | Intel Kaby Lake-U/Y PCH - High Definition Audio with Dolby ATMOS | 💚 Yes  | via standard kernel driver, it also works fine with `pulseaudio` (TODO: document) |
 | Speakers  | "Dolby ATMOS" | 👁️‍🗨️ Kinda | Right now only left speaker works, but it is not noticable as the sound feels quite "centered". I'm hoping a kernel update or some other fix for it will come out eventually to address this. | 
@@ -28,7 +28,7 @@ I am running Debian on it. This repository documents what works and what does no
 | Bluetooth | ? | ⚠️ Not tested | (TODO: test and document) |
 | Battery | 40 Wh Lithium-Polymer | 💚 Yes | Everything works: current status, chargin/discharging rate and remaining battery time estimates |
 | Lid | ACPI-compliant |  💚 Yes | Works as expected: I can just close the lid and it sleeps  |
-| Keyboard |  | 👁️‍🗨️ Mostly | some function keys do not work (eg. display brightness control, keyboard backlight control) | 
+| Keyboard |  | 👁️‍🗨️ Mostly | some function keys do not work (eg. display brightness control) | 
 | Touchpad | | 💚 Yes | Tap-to-click can be enabled via `libinput` ([see details below](#touchpad)) |
 | Port Extender | USC-C dongle included with laptop | 💚 Yes | Full-size HDMI works as expected |
 
@@ -77,3 +77,21 @@ Section "InputClass"
         #Option "TappingButtonMap" "lmr"       
 EndSection
 ```
+
+## Display Backlight
+
+Backlight control  may not work out of the box in userland tools such as `xbacklight`. 
+
+To activate it, create `/etc/X11/xorg.conf.d/30-intel.conf` with:
+
+```
+Section "Device"
+    Identifier  "Card0"
+    Driver      "intel"
+    Option      "Backlight"  "intel_backlight"
+EndSection
+```
+
+Reload X11. Now `xbacklight +10` should increase brightness by 10%. Hardware keys do not work yet, but one can to bind this to any keyboard combination (eg. `Mod4` (Windows key) + `F1` (brightness key))
+
+If you want to get visual feedback on every change consider using [backlight-ctrl.sh](https://github.com/lidel/dotfiles/blob/master/bin/backlight-ctl.sh).
