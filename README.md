@@ -135,7 +135,7 @@ If you are using a power management solution, you may want to see instructions b
 
 #### Laptop Model
 
-If you use `laptop-mode` for power management, set `CONTROL_BLUETOOTH=0` in `/etc/laptop-mode/conf.d/bluetooth.conf`.
+If you use `laptop-mode` for power management, disable or tweak suspend rules in `/etc/laptop-mode/conf.d/bluetooth.conf`.
 
 
 ## Airplane Mode
