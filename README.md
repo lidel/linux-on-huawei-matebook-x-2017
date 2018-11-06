@@ -25,11 +25,11 @@ I am running Debian on it. This repository documents what works and what does no
 | Ports | 1 USB 3.0 / 3.1 Gen1, 1 USB 3.1 Gen2 |  💚 Yes | [USB-PD](https://en.wikipedia.org/wiki/USB_PD) works only  via left port, but it is a hardware limitation of the laptop | 
 | Fingerprint Reader | proprietary sensor made by Huawei | 🚫 No | It is located on the power button, which itself is fully functional  |
 | Wifi | Intel Dual Band Wireless-AC 8265 (a/b/g/n/ac) | 💚 Yes | requires kernel 4.12 and firmware from Debian Testing (TODO: document) | 
-| Bluetooth | Intel (idVendor:0x8087, idProduct:0x0a2b) | 💚 Yes | ([see details below](#bluetooth) |
-| Airplane Mode | Wifi+Bluetooth | 💚 Yes | ([see details below](#airplane-mode) |
+| Bluetooth | Intel (idVendor:0x8087, idProduct:0x0a2b) | 💚 Yes | ([see details below](#bluetooth)) |
+| Airplane Mode | Wifi+Bluetooth | 💚 Yes | ([see details below](#airplane-mode)) |
 | Battery | 40 Wh Lithium-Polymer | 💚 Yes | Everything works: current status, chargin/discharging rate and remaining battery time estimates |
 | Lid | ACPI-compliant |  💚 Yes | Works as expected: I can just close the lid and it sleeps  |
-| Keyboard |  | 👁️‍🗨️ Mostly | some function keys do not work (eg. display brightness control) | 
+| Keyboard |  | 👁️‍🗨️ Mostly | Some function keys do not work (eg. display brightness control), but there is ongoing dev in [aymanbagabas/Huawei-WMI/issues/2](https://github.com/aymanbagabas/Huawei-WMI/issues/2) | 
 | Touchpad | | 💚 Yes | Tap-to-click can be enabled via `libinput` ([see details below](#touchpad)) |
 | Port Extender | USC-C dongle included with laptop | 💚 Yes | Full-size HDMI works as expected |
 
