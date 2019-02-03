@@ -14,24 +14,24 @@ I am running Debian on it. This repository documents what works and what does no
 ## Linux Support Matrix
 
 | Device | Model |  Works | Notes |
-| --- | --- |  :---: | --- |
-| Processor | Intel Core i5-7200U | 💚 Yes | 4 cores (2 real ones), power states etc work out of the box (TODO: document)  |
-| Graphics | Intel HD Graphics 620 |  💚 Yes | via standard kernel driver (TODO: document) |
-| Memory | 8192 MB |  💚 Yes |  |
-| Display | 13.3 inch 16:9, 2160x1440 (2K) | 💚 Yes | resolution is correctly detected by `xrandr`, backlight control does not work via native function keys, but works via additional scripts (see [Display Backlight](#display-backlight)) |
-| Storage | LITEON CB1-SD256, 256 GB | 💚 Yes | via standard kernel driver (TODO: document) |
-| Soundcard  | Intel Kaby Lake-U/Y PCH - High Definition Audio with Dolby ATMOS | 💚 Yes  | via standard kernel driver, it also works fine with `pulseaudio` (TODO: document) |
-| Speakers  | "Dolby ATMOS" | 👁️‍🗨️ Kinda | Right now only left speaker works, but it is not noticable as the sound feels quite "centered". I'm hoping a kernel update or some other fix for it will come out eventually to address this. | 
-| Ports | 1 USB 3.0 / 3.1 Gen1, 1 USB 3.1 Gen2 |  💚 Yes | [USB-PD](https://en.wikipedia.org/wiki/USB_PD) works only  via left port, but it is a hardware limitation of the laptop | 
-| Fingerprint Reader | proprietary sensor made by Huawei | 🚫 No | It is located on the power button, which itself is fully functional  |
-| Wifi | Intel Dual Band Wireless-AC 8265 (a/b/g/n/ac) | 💚 Yes | requires kernel 4.12 and firmware from Debian Testing (TODO: document) | 
-| Bluetooth | Intel (idVendor:0x8087, idProduct:0x0a2b) | 💚 Yes | ([see details below](#bluetooth)) |
-| Airplane Mode | Wifi+Bluetooth | 💚 Yes | ([see details below](#airplane-mode)) |
-| Battery | 40 Wh Lithium-Polymer | 💚 Yes | Everything works: current status, chargin/discharging rate and remaining battery time estimates |
-| Lid | ACPI-compliant |  💚 Yes | Works as expected: I can just close the lid and it sleeps  |
-| Keyboard |  | 👁️‍🗨️ Mostly | Some function keys do not work (eg. display brightness control), but there is ongoing dev in [aymanbagabas/Huawei-WMI/issues/2](https://github.com/aymanbagabas/Huawei-WMI/issues/2) | 
-| Touchpad | | 💚 Yes | Tap-to-click can be enabled via `libinput` ([see details below](#touchpad)) |
-| Port Extender | USC-C dongle included with laptop | 💚 Yes | Full-size HDMI works as expected |
+| ---    | ---   |  :---: | ---   |
+| Processor          | Intel Core i5-7200U                                              | 💚 Yes | 4 cores (2 real ones), power states etc work out of the box (TODO: document)  |
+| Graphics           | Intel HD Graphics 620                                            | 💚 Yes | via standard kernel driver (TODO: document) |
+| Memory             | 8192 MB                                                          | 💚 Yes |  |
+| Display            | 13.3 inch 16:9, 2160x1440 (2K)                                   | 💚 Yes | resolution is correctly detected by `xrandr`|
+| Storage            | LITEON CB1-SD256, 256 GB                                         | 💚 Yes | via standard kernel driver (TODO: document) |
+| Soundcard          | Intel Kaby Lake-U/Y PCH - High Definition Audio with Dolby ATMOS | 💚 Yes | via standard kernel driver, it also works fine with `pulseaudio` (TODO: document) |
+| Speakers           | "Dolby ATMOS"                                                    | 💚 Yes | ([see details below](#sound)) |
+| Ports              | 1 USB 3.0 / 3.1 Gen1, 1 USB 3.1 Gen2                             | 💚 Yes | [USB-PD](https://en.wikipedia.org/wiki/USB_PD) works only  via left port, but it is a hardware limitation of the laptop |
+| Fingerprint Reader | proprietary sensor made by Huawei                                | 🚫 No  | It is located on the power button, which itself is fully functional  |
+| Wifi               | Intel Dual Band Wireless-AC 8265 (a/b/g/n/ac)                    | 💚 Yes | requires kernel 4.12 and firmware from Debian Testing (TODO: document) |
+| Bluetooth          | Intel (idVendor:0x8087, idProduct:0x0a2b)                        | 💚 Yes | ([see details below](#bluetooth)) |
+| Airplane Mode      | Wifi+Bluetooth                                                   | 💚 Yes | ([see details below](#airplane-mode)) |
+| Battery            | 40 Wh Lithium-Polymer                                            | 💚 Yes | Everything works: current status, chargin/discharging rate and remaining battery time estimates |
+| Lid                | ACPI-compliant                                                   | 💚 Yes | Works as expected: I can just close the lid and it sleeps  |
+| Keyboard           |                                                                  | 💚 Yes | ([see details below](#keys-fix)) |
+| Touchpad           |                                                                  | 💚 Yes | Tap-to-click can be enabled via `libinput` ([see details below](#touchpad)) |
+| Port Extender      | USC-C dongle included with laptop                                | 💚 Yes | Full-size HDMI works as expected |
 
 ## Power Management
 
@@ -80,6 +80,8 @@ EndSection
 ```
 
 ## Display Backlight
+
+Backlight controls can now be used with built-in keyboard short cuts, ([see details below](#keyboard))
 
 Backlight control  may not work out of the box in userland tools such as `xbacklight`. 
 
@@ -155,3 +157,50 @@ Works as expected.
 ```
 
 Toggling "airplane mode": `rfkill block all` / `rfkill unblock all`
+
+## Sound
+Right channel audio can enabled with the use of alsa-tools and a script from omegadota, found [here](https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1721987/comments/25).
+
+Instructions:
+
+1. Download the script provided by omegadota found here: https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1721987/comments/25
+
+2. Copy the script to /usr/local/bin: 
+```shell
+sudo cp huawei-sound.sh /usr/local/bin/huawei-sound.sh
+```
+
+3. Add a new service to `/etc/systemd/service` to call the script like so:
+```shell
+$ sudo touch /etc/systemd/service/huawei-sound.service
+```
+
+4. Add the following details into your service:
+```
+[Unit]
+Description=Huawei-soundfix
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/bash /usr/local/bin/huawei-sound.sh
+
+[Install]
+WantedBy=multi-user.target
+```
+
+5. Enable the service:
+```shell
+systemctl enable huawei-sound
+```
+
+6. Check that the service is running:
+```shell
+systemctl status huawei-sound
+```
+
+7. Run a stereo test to validate that right audio is working:
+e..g https://www.youtube.com/watch?v=6TWJaFD6R2s
+
+
+## Keyboard
+Following the steps to fix right channel audio sound found [here](#sound) appears to fix the hotkeys issues, additionally, a kernel patch is being worked on [here](https://github.com/aymanbagabas/Huawei-WMI).
