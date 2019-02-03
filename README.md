@@ -185,7 +185,7 @@ Type=idle
 ExecStart=/usr/bin/bash /usr/local/bin/huawei-sound.sh
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=multi-user.target suspend.target hibernate.target hybrid-sleep.target
 ```
 
 5. Enable the service:
