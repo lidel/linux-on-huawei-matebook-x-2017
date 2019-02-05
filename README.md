@@ -203,4 +203,4 @@ e..g https://www.youtube.com/watch?v=6TWJaFD6R2s
 
 
 ## Keyboard
-Following the steps to fix right channel audio sound found [here](#sound) appears to fix the hotkeys issues, additionally, a kernel patch is being worked on [here](https://github.com/aymanbagabas/Huawei-WMI).
+A kernel patch is being worked on [here](https://github.com/aymanbagabas/Huawei-WMI) which should be released in the next version of the Linux kernel (0.4.20+)
